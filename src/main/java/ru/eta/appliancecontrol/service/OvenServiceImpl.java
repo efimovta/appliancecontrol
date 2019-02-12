@@ -3,7 +3,7 @@ package ru.eta.appliancecontrol.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.eta.appliancecontrol.domain.Oven;
-import ru.eta.appliancecontrol.exception.OvenByIdNotFoundException;
+import ru.eta.appliancecontrol.exception.OvenNotFoundException;
 import ru.eta.appliancecontrol.repository.OvenRepository;
 
 @Service
@@ -29,7 +29,7 @@ public class OvenServiceImpl implements OvenService {
     }
 
     public Oven getOven(long id) {
-        return ovenRepository.findById(id).orElseThrow(OvenByIdNotFoundException::new);
+        return ovenRepository.findById(id).orElseThrow(OvenNotFoundException::new);
     }
 
     private void save(Oven oven) {

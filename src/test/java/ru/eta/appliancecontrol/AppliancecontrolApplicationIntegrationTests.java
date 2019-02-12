@@ -6,8 +6,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+
+import javax.transaction.Transactional;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
@@ -19,6 +22,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @AutoConfigureTestDatabase
+@Sql(value = "/data.sql")
+@Transactional
 public class AppliancecontrolApplicationIntegrationTests {
 
 	private static final String API = "/api/v1/oven";
@@ -55,7 +60,7 @@ public class AppliancecontrolApplicationIntegrationTests {
 				.andExpect(status().is2xxSuccessful())
 				.andExpect(jsonPath("$.id").value(OVEN_ID))
 				.andExpect(jsonPath("$.door").value(false))
-				.andExpect(jsonPath("$.temperature").value(0))
+				.andExpect(jsonPath("$.cookingParam.temperature").value(0))
 				.andReturn();
 	}
 

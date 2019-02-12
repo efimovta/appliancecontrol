@@ -3,6 +3,7 @@ package ru.eta.appliancecontrol.domain;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import ru.eta.appliancecontrol.domain.embeddable.CookingParam;
 
 import javax.persistence.*;
 
@@ -21,10 +22,8 @@ public class Recipe {
     private String name;
 
     private String description;
-    private int temperature;
-    private int cookingTimeSeconds;
 
-    @ManyToOne
-    private HeatingMode heatingMode;
+    @Embedded
+    CookingParam cookingParam;
 
 }

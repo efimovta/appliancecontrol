@@ -3,6 +3,7 @@ package ru.eta.appliancecontrol.domain;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import ru.eta.appliancecontrol.domain.embeddable.CookingParam;
 
 import javax.persistence.*;
 
@@ -24,11 +25,8 @@ public class Oven {
     private boolean lightBulb;
     private boolean cook;
 
-    private int temperature;
-    private int remainTimeSeconds;
-
-    @ManyToOne
-    private HeatingMode heatingMode;
+    @Embedded
+    CookingParam cookingParam;
 
     @ManyToOne
     private Recipe lastAppliedRecipe;
