@@ -27,6 +27,6 @@ public class Oven {
     private boolean lightBulb;
     private boolean cook;
     @ManyToOne
-    private Recipe lastAppliedRecipe;
+    private Recipe recipe;
 
 }

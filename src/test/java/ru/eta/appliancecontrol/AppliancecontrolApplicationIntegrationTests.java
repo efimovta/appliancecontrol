@@ -11,7 +11,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import ru.eta.appliancecontrol.domain.Oven;
 import ru.eta.appliancecontrol.domain.Recipe;
+import ru.eta.appliancecontrol.domain.embeddable.CookingParam;
 
 import javax.transaction.Transactional;
 import java.io.InputStream;
@@ -19,6 +21,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -37,6 +40,7 @@ public class AppliancecontrolApplicationIntegrationTests {
     private static final String RECIPE_API = "/api/v1/recipe";
     private static final long OVEN_ID = 1;
     private static final long OVEN_WRONG_ID = 123123;
+    private static final long RECIPE_ID = 1;
 
 
     @Autowired
@@ -98,6 +102,30 @@ public class AppliancecontrolApplicationIntegrationTests {
 
         assertThat(recipeListFromRequest.size()).isEqualTo(1);
         assertEquals(recipeListFromRequest, recipeListFromFile);
+    }
+
+
+    @Test
+    public void setRecipe_CookingParamCopiedToOvenFromRecipe() throws Exception {
+        String ovenJson = this.mockMvc.perform(get(OVEN_API + '/' + OVEN_ID))
+                .andReturn().getResponse().getContentAsString();
+        String recipeJson = this.mockMvc.perform(get(RECIPE_API + '/' + RECIPE_ID))
+                .andReturn().getResponse().getContentAsString();
+        Oven oven = objectMapper.readValue(ovenJson, Oven.class);
+        Recipe recipe = objectMapper.readValue(recipeJson, Recipe.class);
+
+        assertNotEquals(oven.getCookingParam(), recipe.getCookingParam());
+
+        String ovenAfterRecipeSetJson = this.mockMvc
+                .perform(put(OVEN_API + '/' + OVEN_ID + "/recipe/id")
+                        .content(Long.toString(RECIPE_ID)).contentType("application/json"))
+                .andReturn().getResponse().getContentAsString();
+        Oven ovenAfterRecipeSet = objectMapper.readValue(ovenAfterRecipeSetJson, Oven.class);
+
+        CookingParam resultedOvenCookingParam = ovenAfterRecipeSet.getCookingParam();
+        CookingParam recipeCookingParam1 = recipe.getCookingParam();
+
+        assertEquals(resultedOvenCookingParam, recipeCookingParam1);
     }
 
 }

@@ -9,7 +9,7 @@
     "cookingTimeSeconds": 0,
     "heatingMode": null
   },
-  "lastAppliedRecipe": {
+  "recipe": {
     "id": 1,
     "name": "Timur best chicken (FOR TEST)",
     "description": "Hello friends! My recipe steps too simple: 1. Get chicken 2. Add salt 3. Move chicken into oven 4. Accept recipe params 5. Well done! (FOR TEST)",

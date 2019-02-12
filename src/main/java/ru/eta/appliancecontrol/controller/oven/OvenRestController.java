@@ -34,4 +34,9 @@ public class OvenRestController {
         ovenService.controlLightBulb(id, isLightBulbMustShine);
     }
 
+    @PutMapping("/{id}/recipe/id")
+    public Oven setRecipe(@RequestBody long recipeId, @PathVariable("id") long id) {
+        return ovenService.setRecipeAndCookingParam(id, recipeId);
+    }
+
 }

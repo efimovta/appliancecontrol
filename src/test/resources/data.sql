@@ -11,5 +11,5 @@ VALUES (1, 'Timur best chicken (FOR TEST)', 255, 600, 3,
 );
 
 
-INSERT INTO oven (id, name, door, light_bulb, cook, temperature, cooking_time_seconds, heating_mode_id, last_applied_recipe_id)
+INSERT INTO oven (id, name, door, light_bulb, cook, temperature, cooking_time_seconds, heating_mode_id, recipe_id)
 VALUES (1, 'Timur oven (FOR TEST)', false, false, false, 0, 0, null, 1);

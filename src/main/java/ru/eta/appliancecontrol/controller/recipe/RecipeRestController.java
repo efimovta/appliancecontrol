@@ -2,6 +2,7 @@ package ru.eta.appliancecontrol.controller.recipe;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.eta.appliancecontrol.domain.Recipe;
@@ -24,4 +25,10 @@ public class RecipeRestController {
     public List<Recipe> getAll() {
         return recipeService.getAll();
     }
+
+    @GetMapping("/{id}")
+    public Recipe getAll(@PathVariable("id") long id) {
+        return recipeService.getRecipeById(id);
+    }
 }
+
