@@ -1,4 +1,4 @@
-package ru.eta.appliancecontrol.service;
+package ru.eta.appliancecontrol.service.oven;
 
 import ru.eta.appliancecontrol.domain.Oven;
 

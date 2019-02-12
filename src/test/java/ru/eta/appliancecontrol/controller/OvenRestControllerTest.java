@@ -7,10 +7,11 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import ru.eta.appliancecontrol.controller.oven.OvenRestController;
 import ru.eta.appliancecontrol.domain.Oven;
 import ru.eta.appliancecontrol.domain.embeddable.CookingParam;
 import ru.eta.appliancecontrol.exception.OvenNotFoundException;
-import ru.eta.appliancecontrol.service.OvenService;
+import ru.eta.appliancecontrol.service.oven.OvenService;
 
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;

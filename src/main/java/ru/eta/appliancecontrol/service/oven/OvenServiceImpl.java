@@ -1,4 +1,4 @@
-package ru.eta.appliancecontrol.service;
+package ru.eta.appliancecontrol.service.oven;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

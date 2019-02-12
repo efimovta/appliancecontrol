@@ -1,10 +1,10 @@
-package ru.eta.appliancecontrol.controller;
+package ru.eta.appliancecontrol.controller.oven;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import ru.eta.appliancecontrol.domain.Oven;
-import ru.eta.appliancecontrol.service.OvenService;
+import ru.eta.appliancecontrol.service.oven.OvenService;
 
 @RestController
 @RequestMapping(value = "/api/v1/oven")

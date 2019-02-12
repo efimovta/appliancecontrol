@@ -11,6 +11,7 @@ import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringRunner;
 import ru.eta.appliancecontrol.repository.OvenRepository;
 
+import static junit.framework.TestCase.assertTrue;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringRunner.class)
@@ -24,6 +25,7 @@ public class OvenTests {
     @Autowired
     private OvenRepository ovenRepository;
 
+    @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
     @Autowired
     private JacksonTester<Oven> json;
 
@@ -34,6 +36,15 @@ public class OvenTests {
         Oven ovenFromDB = ovenRepository.getOne(ovenFromFile.getId());
 
         assertThat(this.json.write(ovenFromDB)).isEqualTo("/oven.json");
+    }
+
+    @Test
+    public void checkEqualsMethod() throws Exception {
+        Oven oven = json.readObject("/oven.json");
+        Oven ovenCopy = json.readObject("/oven.json");
+
+        assertTrue(oven != ovenCopy);
+        assertTrue(oven.equals(ovenCopy));
     }
 }
 
