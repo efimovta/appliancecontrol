@@ -27,7 +27,7 @@ For testing API you can use `curl` util (for example, from Linux or Git Bash) or
 
 ## Oven Endpoint (/api/v1/oven)
 
-**Request**: `GET /api/v1/oven/{id}` return all recipes.
+**Request**: `GET /api/v1/oven/{id}` return oven info.
 
 **Response**: 200 or 404 if oven not found
 
@@ -45,6 +45,9 @@ For testing API you can use `curl` util (for example, from Linux or Git Bash) or
     "heatingMode": null
   },
   "recipe": {
+    "id": 1,
+    "name": "Timur best chicken",
+    "description": "Hello friends! My recipe steps too simple: 1. Get chicken 2. Add salt 3. Move chicken into oven 4. Accept recipe params 5. Well done!",
     "cookingParam": {
       "temperature": 255,
       "cookingTimeSeconds": 600,
@@ -52,10 +55,7 @@ For testing API you can use `curl` util (for example, from Linux or Git Bash) or
         "id": 3,
         "name": "Convection"
       }
-    },
-    "id": 1,
-    "name": "Timur best chicken",
-    "description": "Hello friends! My recipe steps too simple: 1. Get chicken 2. Add salt 3. Move chicken into oven 4. Accept recipe params 5. Well done!"
+    }
   }
 }
 ```
@@ -110,8 +110,8 @@ will set to current oven params
 ---
 
 ---
-**Request**: `PUT /api/v1/oven/{id}/cookingParam` to set some cooking param like: 
-temperature, heating mode or cooking time
+**Request**: `PUT /api/v1/oven/{id}/cookingParam` to set cooking param: 
+temperature, heating mode, cooking time
 
 **Body**: 
 ```json
@@ -139,13 +139,16 @@ name ignored and will gotten from DB
 
 ## Recipe Endpoint (/api/v1/recipe)
 
-**Request**: `GET /api/v1/recipe` return all recipes.
+**Request**: `GET /api/v1/recipe/{id}` return recipe info.
 
-**Response**: 200 or 404 if recipe not ffound
+**Response**: 200 or 404 if recipe not found
 
 *Example command: `curl http://localhost:8080/api/v1/recipe/1`*
 ```json
 {
+  "id": 1,
+  "name": "Timur best chicken",
+  "description": "Hello friends! My recipe steps too simple: 1. Get chicken 2. Add salt 3. Move chicken into oven 4. Accept recipe params 5. Well done!",
   "cookingParam": {
     "temperature": 255,
     "cookingTimeSeconds": 600,
@@ -153,10 +156,7 @@ name ignored and will gotten from DB
       "id": 3,
       "name": "Convection"
     }
-  },
-  "id": 1,
-  "name": "Timur best chicken",
-  "description": "Hello friends! My recipe steps too simple: 1. Get chicken 2. Add salt 3. Move chicken into oven 4. Accept recipe params 5. Well done!"
+  }
 }
 ```
 
@@ -170,3 +170,28 @@ name ignored and will gotten from DB
 
 ---
 ---
+
+
+## Heating Mode Endpoint (/api/v1/heatingmode)
+
+**Request**: `GET /api/v1/heatingmode` return all heating modes.
+
+**Response**: 200
+
+*Example command: `curl http://localhost:8080/api/v1/heatingmode`*
+```json
+[
+  {
+    "id": 1,
+    "name": "Top heating"
+  },
+  {
+    "id": 2,
+    "name": "Bottom heating"
+  },
+  {
+    "id": 3,
+    "name": "Convection"
+  }
+]
+```

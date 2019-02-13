@@ -37,7 +37,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureTestDatabase
 @Sql(value = "/data.sql")
 @Transactional
-public class AppliancecontrolApplicationIntegrationTests {
+public class ApplianceControlApplicationIntegrationTests {
 
     private static final String OVEN_API = "/api/v1/oven";
     private static final String RECIPE_API = "/api/v1/recipe";
