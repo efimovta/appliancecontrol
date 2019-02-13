@@ -10,7 +10,20 @@ mvn clean install
 java -jar target\appliancecontrol-0.0.1-SNAPSHOT.jar
 ```
 
+#### Docker
+After steps above you can make a docker image and start it. Also from root folder:
+```cmd
+docker build -f Dockerfile -t appliance-control .
+docker run -p 8090:8080 appliance-control
+```
+Where 8090 is port your local machine. 
 
+**Note:** on Windows system you cannot just type CTRL+C or etc for closing the program,
+ you need know 'Container NAME or ID' and close it directly:
+```cmd
+docker container ls
+docker container stop <Container NAME or ID>
+```
 
 #### H2 database
 When app run you can check database state through web console: [http://localhost:8080/h2](http://localhost:8080/h2)
