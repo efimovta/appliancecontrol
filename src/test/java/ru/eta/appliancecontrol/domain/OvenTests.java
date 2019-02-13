@@ -11,12 +11,15 @@ import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringRunner;
 import ru.eta.appliancecontrol.repository.OvenRepository;
 
+import javax.transaction.Transactional;
+
 import static junit.framework.TestCase.assertTrue;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringRunner.class)
 @DataJpaTest
 @AutoConfigureJsonTesters
+@Transactional
 public class OvenTests {
 
     @Autowired

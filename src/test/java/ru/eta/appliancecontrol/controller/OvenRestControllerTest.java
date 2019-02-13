@@ -41,7 +41,7 @@ public class OvenRestControllerTest {
 
     @Test
     public void lightOn() throws Exception {
-        this.mockMvc.perform(put(API + '/' + OVEN_ID + "/lightBulb")
+        this.mockMvc.perform(put(API + '/' + OVEN_ID + "/lightBulbIsOn")
                 .content("\"true\"")
                 .contentType("application/json"))
                 .andDo(print())
@@ -50,7 +50,7 @@ public class OvenRestControllerTest {
 
     @Test
     public void openDoor() throws Exception {
-        this.mockMvc.perform(put(API + '/' + OVEN_ID + "/door")
+        this.mockMvc.perform(put(API + '/' + OVEN_ID + "/doorIsOpen")
                 .content("\"true\"")
                 .contentType("application/json"))
                 .andDo(print())
@@ -72,7 +72,7 @@ public class OvenRestControllerTest {
                 .andDo(print())
                 .andExpect(status().is2xxSuccessful())
                 .andExpect(jsonPath("$.id").value(OVEN_ID))
-                .andExpect(jsonPath("$.door").value(false))
+                .andExpect(jsonPath("$.doorIsOpen").value(false))
                 .andExpect(jsonPath("$.cookingParam.temperature").value(TEMPERATURE));
     }
 

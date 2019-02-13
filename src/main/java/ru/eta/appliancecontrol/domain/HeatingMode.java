@@ -21,4 +21,11 @@ public class HeatingMode {
     @Column(unique = true, nullable = false)
     private String name;
 
+    public HeatingMode copy() {
+        HeatingMode copy = new HeatingMode();
+        copy.setName(getName());
+        copy.setId(getId());
+        return copy;
+    }
+
 }

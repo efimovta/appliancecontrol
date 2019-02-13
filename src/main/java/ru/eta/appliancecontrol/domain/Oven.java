@@ -23,9 +23,9 @@ public class Oven {
     private long id;
     @Column(nullable = false)
     private String name;
-    private boolean door;
-    private boolean lightBulb;
-    private boolean cook;
+    private boolean doorIsOpen;
+    private boolean lightBulbIsOn;
+    private boolean cooking;
     @ManyToOne
     private Recipe recipe;
 

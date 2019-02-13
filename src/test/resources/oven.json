@@ -1,9 +1,9 @@
 {
   "id": 1,
   "name": "Timur oven (FOR TEST)",
-  "door": false,
-  "lightBulb": false,
-  "cook": false,
+  "doorIsOpen": false,
+  "lightBulbIsOn": false,
+  "cooking": false,
   "cookingParam": {
     "temperature": 0,
     "cookingTimeSeconds": 0,

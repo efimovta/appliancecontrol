@@ -1,14 +1,19 @@
 package ru.eta.appliancecontrol.service.oven;
 
 import ru.eta.appliancecontrol.domain.Oven;
+import ru.eta.appliancecontrol.domain.embeddable.CookingParam;
 
 public interface OvenService {
 
-    Oven controlDoor(long id, boolean isDoorMustBeOpen);
+    Oven setIsDoorOpen(long ovenId, boolean isDoorMustBeOpen);
 
-    Oven controlLightBulb(long id, boolean isLightBulbMustShine);
+    Oven setIsLightBulbShine(long ovenId, boolean isLightBulbMustShine);
 
-    Oven getOven(long id);
+    Oven getOven(long ovenId);
 
-    Oven setRecipeAndCookingParam(long id, long recipeId);
+    Oven setRecipeAndItsCookingParam(long ovenId, long recipeId);
+
+    Oven setCookingParam(long ovenId, CookingParam cookingParam);
+
+    Oven setIsCookingMustGoOn(long ovenId, boolean isCookingMustGoOn);
 }

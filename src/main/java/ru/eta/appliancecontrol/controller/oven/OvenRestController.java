@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import ru.eta.appliancecontrol.domain.Oven;
+import ru.eta.appliancecontrol.domain.embeddable.CookingParam;
 import ru.eta.appliancecontrol.service.oven.OvenService;
 
 @RestController
@@ -22,21 +23,32 @@ public class OvenRestController {
         return ovenService.getOven(id);
     }
 
-    @PutMapping("/{id}/door")
+    @PutMapping("/{id}/cooking")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void controlDoor(@RequestBody boolean isDoorMustBeOpen, @PathVariable("id") long id) {
-        ovenService.controlDoor(id, isDoorMustBeOpen);
+    public void cookingControl(@RequestBody boolean isCookingMustGoOn, @PathVariable("id") long id) {
+        ovenService.setIsCookingMustGoOn(id, isCookingMustGoOn);
     }
 
-    @PutMapping("/{id}/lightBulb")
+    @PutMapping("/{id}/doorIsOpen")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void controlDoor(@RequestBody boolean isDoorMustBeOpen, @PathVariable("id") long id) {
+        ovenService.setIsDoorOpen(id, isDoorMustBeOpen);
+    }
+
+    @PutMapping("/{id}/lightBulbIsOn")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void controlLightBulb(@RequestBody boolean isLightBulbMustShine, @PathVariable("id") long id) {
-        ovenService.controlLightBulb(id, isLightBulbMustShine);
+        ovenService.setIsLightBulbShine(id, isLightBulbMustShine);
     }
 
     @PutMapping("/{id}/recipe/id")
     public Oven setRecipe(@RequestBody long recipeId, @PathVariable("id") long id) {
-        return ovenService.setRecipeAndCookingParam(id, recipeId);
+        return ovenService.setRecipeAndItsCookingParam(id, recipeId);
+    }
+
+    @PutMapping("/{id}/cookingParam")
+    public Oven setCookingParam(@RequestBody CookingParam cookingParam, @PathVariable("id") long id) {
+        return ovenService.setCookingParam(id, cookingParam);
     }
 
 }

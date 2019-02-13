@@ -24,7 +24,7 @@ public class CookingParam {
 
     public CookingParam copy() {
         CookingParam copy = new CookingParam();
-        copy.setHeatingMode(getHeatingMode());
+        copy.setHeatingMode(getHeatingMode().copy());
         copy.setCookingTimeSeconds(getCookingTimeSeconds());
         copy.setTemperature(getTemperature());
         return copy;

@@ -8,5 +8,5 @@ public interface RecipeService {
 
     List<Recipe> getAll();
 
-    Recipe getRecipeById(long id);
+    Recipe getRecipe(long recipeId);
 }

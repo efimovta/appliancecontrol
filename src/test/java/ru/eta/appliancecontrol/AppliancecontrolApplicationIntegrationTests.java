@@ -6,11 +6,14 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.boot.test.autoconfigure.orm.jpa.AutoConfigureTestEntityManager;
+import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import ru.eta.appliancecontrol.domain.HeatingMode;
 import ru.eta.appliancecontrol.domain.Oven;
 import ru.eta.appliancecontrol.domain.Recipe;
 import ru.eta.appliancecontrol.domain.embeddable.CookingParam;
@@ -20,8 +23,7 @@ import java.io.InputStream;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -31,6 +33,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @AutoConfigureMockMvc
+@AutoConfigureTestEntityManager
 @AutoConfigureTestDatabase
 @Sql(value = "/data.sql")
 @Transactional
@@ -41,7 +44,10 @@ public class AppliancecontrolApplicationIntegrationTests {
     private static final long OVEN_ID = 1;
     private static final long OVEN_WRONG_ID = 123123;
     private static final long RECIPE_ID = 1;
+    private static final long HEATING_MODE_ID = 1;
 
+    @Autowired
+    TestEntityManager entityManager;
 
     @Autowired
     private ObjectMapper objectMapper;
@@ -51,7 +57,7 @@ public class AppliancecontrolApplicationIntegrationTests {
 
     @Test
     public void lightOn() throws Exception {
-        this.mockMvc.perform(put(OVEN_API + '/' + OVEN_ID + "/lightBulb")
+        this.mockMvc.perform(put(OVEN_API + '/' + OVEN_ID + "/lightBulbIsOn")
                 .content("\"true\"")
                 .contentType("application/json"))
                 .andDo(print())
@@ -60,7 +66,7 @@ public class AppliancecontrolApplicationIntegrationTests {
 
     @Test
     public void openDoor() throws Exception {
-        this.mockMvc.perform(put(OVEN_API + '/' + OVEN_ID + "/door")
+        this.mockMvc.perform(put(OVEN_API + '/' + OVEN_ID + "/doorIsOpen")
                 .content("\"true\"")
                 .contentType("application/json"))
                 .andDo(print())
@@ -73,7 +79,7 @@ public class AppliancecontrolApplicationIntegrationTests {
                 .andDo(print())
                 .andExpect(status().is2xxSuccessful())
                 .andExpect(jsonPath("$.id").value(OVEN_ID))
-                .andExpect(jsonPath("$.door").value(false))
+                .andExpect(jsonPath("$.doorIsOpen").value(false))
                 .andExpect(jsonPath("$.cookingParam.temperature").value(0))
                 .andReturn();
     }
@@ -126,6 +132,50 @@ public class AppliancecontrolApplicationIntegrationTests {
         CookingParam recipeCookingParam1 = recipe.getCookingParam();
 
         assertEquals(resultedOvenCookingParam, recipeCookingParam1);
+    }
+
+    @Test
+    public void setCookingParamToOven_heatingNameWillIgnored() throws Exception {
+        CookingParam cookingParamToSet = new CookingParam();
+        HeatingMode heatingMode = new HeatingMode();
+        cookingParamToSet.setTemperature(50);
+        cookingParamToSet.setCookingTimeSeconds(53);
+        cookingParamToSet.setHeatingMode(heatingMode);
+        heatingMode.setId(HEATING_MODE_ID);
+        heatingMode.setName("Some ignored name of heating mode while set it, value from db will be used");
+
+        String cpJson = objectMapper.writeValueAsString(cookingParamToSet);
+
+        String ovenJson = this.mockMvc.perform(put(OVEN_API + '/' + OVEN_ID + "/cookingParam")
+                .content(cpJson).contentType("application/json"))
+                .andReturn().getResponse().getContentAsString();
+        Oven oven = objectMapper.readValue(ovenJson, Oven.class);
+        CookingParam resultedOvenCookingParam = oven.getCookingParam();
+        HeatingMode resultedHeatingMode = resultedOvenCookingParam.getHeatingMode();
+
+        assertNotEquals("Transferred heating name ignored and now no equals", resultedHeatingMode.getName(), cookingParamToSet.getHeatingMode().getName());
+
+        cookingParamToSet.getHeatingMode().setName(resultedHeatingMode.getName());
+        assertEquals("Other params saved as is", resultedOvenCookingParam, cookingParamToSet);
+
+    }
+
+
+    @Test
+    public void startOven_doorMustCloseAutomatically() throws Exception {
+        Oven ovenBefore = entityManager.find(Oven.class, OVEN_ID);
+        ovenBefore.setDoorIsOpen(true);
+        entityManager.persistAndFlush(ovenBefore);
+
+        assertTrue(ovenBefore.isDoorIsOpen());
+
+        this.mockMvc.perform(put(OVEN_API + '/' + OVEN_ID + "/cooking")
+                .content("\"true\"").contentType("application/json"))
+                .andExpect(status().isNoContent());
+
+        Oven ovenAfter = entityManager.find(Oven.class, OVEN_ID);
+
+        assertFalse(ovenAfter.isDoorIsOpen());
     }
 
 }
